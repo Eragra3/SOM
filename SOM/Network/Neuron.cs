@@ -2,17 +2,15 @@
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
-namespace SOM
+namespace SOM.Network
 {
     public class Neuron
     {
-        public static IContinuousDistribution ContinuousDistribution { get; set; }
-
         public Vector<double> Weights { get; set; }
 
-        public Neuron(int weightsCount)
+        public Neuron(int weightsCount, IContinuousDistribution distribution)
         {
-            Weights = DenseVector.CreateRandom(weightsCount, ContinuousDistribution);
+            Weights = DenseVector.CreateRandom(weightsCount, distribution);
         }
     }
 }
