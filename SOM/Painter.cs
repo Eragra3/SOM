@@ -26,16 +26,22 @@ namespace SOM
             foreach (var neuron in som.Neurons)
             {
                 var p = new Point(neuron.Weights[0], neuron.Weights[1]);
-                p.Offset(_centerX, _centerY);
+                p = LocalToWorld(p);
                 polyline.Points.Add(p);
             }
 
             var first = som.Neurons.First.Value;
             var firstP = new Point(first.Weights[0], first.Weights[1]);
-            firstP.Offset(_centerX, _centerY);
+            firstP = LocalToWorld(firstP);
             polyline.Points.Add(firstP);
 
             return polyline;
+        }
+
+        public Point LocalToWorld(Point p)
+        {
+            p.Offset(_centerX, _centerY);
+            return p;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace SOM
     /// </summary>
     public partial class MainWindow : Window
     {
-        public const int POINT_RADIUS = 2;
+        public const int POINT_RADIUS = 5;
 
         public double InitialWeightsRange { get; set; }
 
@@ -43,7 +43,7 @@ namespace SOM
 
                 _rng = new ContinuousUniform(-World.ActualWidth / 4.0, World.ActualWidth / 4.0);
 
-                GenerateRandomCities(10);
+                GenerateRandomCities(5);
                 CreateNewSOM();
                 Redraw();
             };
@@ -68,6 +68,8 @@ namespace SOM
             for (int i = 0; i < count; i++)
             {
                 var point = new Point(_rng.Sample(), _rng.Sample());
+
+                point = _painter.LocalToWorld(point);
 
                 var city = new City
                 {
@@ -104,15 +106,14 @@ namespace SOM
         {
             foreach (var city in Cities)
             {
-                var ellipse = new Ellipse()
+                var ellipse = new Ellipse
                 {
                     Width = POINT_RADIUS,
-                    Height = POINT_RADIUS
+                    Height = POINT_RADIUS,
+                    Fill = Brushes.Black
                 };
 
-                ellipse.Fill = Brushes.Black;
-                Canvas.SetLeft(ellipse, city.Point.X)
-                    ;
+                Canvas.SetLeft(ellipse, city.Point.X);
                 Canvas.SetTop(ellipse, city.Point.Y);
 
                 World.Children.Add(ellipse);
