@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SOM"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Dr inż. Piotr Szymański to najlepszy prowadzący" Height="600" Width="1000">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Canvas>
+            
+        </Canvas>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Button Grid.Column="1" Width="100" Height="50" Background="LawnGreen">Calculate</Button>
+        </StackPanel>
     </Grid>
 </Window>
