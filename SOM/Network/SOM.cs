@@ -98,7 +98,7 @@ namespace SOM.Network
 
         private double NeighbourhoodFunction(double distance, int iteration)
         {
-            double sigma = Math.Max(Math.Sqrt(iteration) / 10, 0.1);
+            double sigma = Math.Max(1 / Math.Sqrt(iteration), 0.1);
             var sigma2 = sigma * sigma;
             var scale = 1;
             var f = scale * (1 / Math.Sqrt(2 * sigma2 * Math.PI) * Math.Exp(-(distance * distance) / (2 * sigma2)));
