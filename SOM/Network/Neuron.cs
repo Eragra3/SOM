@@ -12,5 +12,10 @@ namespace SOM.Network
         {
             Weights = DenseVector.CreateRandom(weightsCount, distribution);
         }
+
+        public void Learn(Vector<double> input, double neighbourhood, double learningRate)
+        {
+            Weights += neighbourhood * learningRate * (input - Weights);
+        }
     }
 }

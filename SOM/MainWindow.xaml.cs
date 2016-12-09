@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MathNet.Numerics.Distributions;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace SOM
 {
@@ -24,12 +25,18 @@ namespace SOM
         public const int POINT_RADIUS = 5;
 
         public double InitialWeightsRange { get; set; }
+        public double NeighbourhoodParam { get; set; }
+        public double LearningRate { get; set; }
+        public double LearningRateDecay { get; set; }
+        public int CitiesCount { get; set; }
 
         public IList<City> Cities { get; } = new List<City>();
 
         private Network.SOM _som;
         private Painter _painter;
         private IContinuousDistribution _rng;
+
+        private int _currentIteration;
 
         public MainWindow()
         {
@@ -39,11 +46,16 @@ namespace SOM
             {
                 _painter = new Painter(World.ActualWidth / 2.0, World.ActualHeight / 2.0);
 
-                InitialWeightsRange = World.ActualWidth / 5.0;
+                InitialWeightsRange = World.ActualWidth / 6.0;
+                NeighbourhoodParam = 0.2;
+                LearningRate = 0.5;
+                LearningRateDecay = 0.04;
 
-                _rng = new ContinuousUniform(-World.ActualWidth / 4.0, World.ActualWidth / 4.0);
+                CitiesCount = 5;
 
-                GenerateRandomCities(5);
+                _rng = new ContinuousUniform(-World.ActualWidth / 5.0, World.ActualWidth / 5.0);
+
+                GenerateRandomCities(CitiesCount);
                 CreateNewSOM();
                 Redraw();
             };
@@ -51,7 +63,8 @@ namespace SOM
 
         private void CreateNewSOM()
         {
-            _som = new Network.SOM(Cities.Count, 2, InitialWeightsRange);
+            _som = new Network.SOM(Cities.Count, 2, InitialWeightsRange, NeighbourhoodParam, LearningRate, LearningRateDecay);
+            _currentIteration = 0;
         }
 
         private void Redraw()
@@ -68,8 +81,6 @@ namespace SOM
             for (int i = 0; i < count; i++)
             {
                 var point = new Point(_rng.Sample(), _rng.Sample());
-
-                point = _painter.LocalToWorld(point);
 
                 var city = new City
                 {
@@ -89,6 +100,7 @@ namespace SOM
         private void GenerateSOM(object sender, RoutedEventArgs e)
         {
             CreateNewSOM();
+            Redraw();
         }
 
         #region HELPER DRAW METHODS
@@ -113,12 +125,30 @@ namespace SOM
                     Fill = Brushes.Black
                 };
 
-                Canvas.SetLeft(ellipse, city.Point.X);
-                Canvas.SetTop(ellipse, city.Point.Y);
+                var worldPoint = _painter.LocalToWorld(city.Point);
+
+                var x = worldPoint.X;
+                var y = worldPoint.Y;
+
+                Canvas.SetLeft(ellipse, x);
+                Canvas.SetTop(ellipse, y);
 
                 World.Children.Add(ellipse);
             }
         }
         #endregion
+
+        private void TrainOneEpoch(object sender, RoutedEventArgs e)
+        {
+            var input = Cities.Select(c => new DenseVector(2) { [0] = c.Point.X, [1] = c.Point.Y });
+            _som.TrainOneEpoch(input, LearningRate, _currentIteration++);
+            Redraw();
+        }
+
+        private void GenerateCities(object sender, RoutedEventArgs e)
+        {
+            GenerateRandomCities(CitiesCount);
+            Redraw();
+        }
     }
 }
