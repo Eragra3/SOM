@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using MathNet.Numerics.Distributions;
@@ -49,8 +41,10 @@ namespace SOM
             ContentRendered += (sender, args) =>
             {
                 _painter = new Painter(World.ActualWidth / 2.0, World.ActualHeight / 2.0);
-                _timer = new DispatcherTimer(DispatcherPriority.Send);
-                _timer.Interval = TimeSpan.FromMilliseconds(50);
+                _timer = new DispatcherTimer(DispatcherPriority.Send)
+                {
+                    Interval = TimeSpan.FromMilliseconds(50)
+                };
 
                 InitialWeightsRange = World.ActualWidth / 6.0;
                 NeighbourhoodParam = 0.2;
@@ -149,12 +143,6 @@ namespace SOM
             _som.TrainOneEpoch(input, LearningRate, _currentIteration++);
         }
         #endregion
-
-        private void TrainOneEpoch(object sender, RoutedEventArgs e)
-        {
-            TrainOneEpoch();
-            Redraw();
-        }
 
         private void GenerateCities(object sender, RoutedEventArgs e)
         {

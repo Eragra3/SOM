@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
-using MathNet.Numerics.Interpolation;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace SOM.Network
