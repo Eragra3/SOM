@@ -52,6 +52,7 @@ namespace SOM
                 LearningRateDecay = 0.04;
 
                 CitiesCount = 5;
+                CitiesCountTB.Text = CitiesCount.ToString();
 
                 _rng = new ContinuousUniform(-World.ActualWidth / 5.0, World.ActualWidth / 5.0);
 
@@ -146,12 +147,23 @@ namespace SOM
 
         private void GenerateCities(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                CitiesCount = int.Parse(CitiesCountTB.Text);
+                CitiesCountTB.BorderBrush = Brushes.Black;
+            }
+            catch (Exception)
+            {
+                CitiesCountTB.BorderBrush = Brushes.Red;
+                throw;
+            }
             GenerateRandomCities(CitiesCount);
             Redraw();
         }
 
         private void Start(object sender, RoutedEventArgs e)
         {
+            if (_timer.IsEnabled) return;
             _timer.Tick += TrainOneEpoch;
             _timer.Start();
         }
@@ -166,6 +178,15 @@ namespace SOM
         {
             _timer.Tick -= TrainOneEpoch;
             _timer.Stop();
+        }
+
+        private void TrainMutlipleEpochs(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < 200; i++)
+            {
+                TrainOneEpoch();
+            }
+            Redraw();
         }
     }
 }

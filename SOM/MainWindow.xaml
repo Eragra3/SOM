@@ -19,6 +19,8 @@
         <StackPanel Grid.Column="1" Orientation="Vertical">
             <Button Grid.Column="1" Width="100" Height="50" Background="LawnGreen"
                     Click="TrainOneEpoch">Next iteration</Button>
+            <Button Grid.Column="1" Width="100" Height="40" Background="LawnGreen"
+                    Click="TrainMutlipleEpochs">Next 200 iterations</Button>
             <Button Grid.Column="1" Width="100" Height="30" Margin="0, 10, 0, 10"
                     Background="Blue" Click="Start">Start</Button>
             <Button Grid.Column="1" Width="100" Height="30"  Margin="0, 0, 0, 10"
@@ -27,6 +29,8 @@
                     Background="Violet" Click="GenerateSOM">Generate SOM</Button>
             <Button Grid.Column="1" Width="100" Height="30" Margin="0, 0, 0, 10"
                     Background="Violet" Click="GenerateCities">Generate cities</Button>
+            <TextBox Grid.Column="1" Width="100" Height="30" Margin="0, 0, 0, 10"
+                    Background="Violet" Name="CitiesCountTB"></TextBox>
         </StackPanel>
     </Grid>
 </Window>
